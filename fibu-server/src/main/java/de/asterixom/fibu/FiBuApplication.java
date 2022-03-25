@@ -1,0 +1,13 @@
+package de.asterixom.fibu;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class FiBuApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(FiBuApplication.class, args);
+	}
+
+}
