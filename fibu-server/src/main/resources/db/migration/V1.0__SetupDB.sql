@@ -1,0 +1,5 @@
+CREATE TABLE test (
+	id VARCHAR(36) PRIMARY KEY,
+	test VARCHAR(256),
+	test2 NUMBER
+);

@@ -1,0 +1,9 @@
+spring:
+  security:
+    user:
+      password: geheim
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  flyway:
+    clean-on-validation-error: true

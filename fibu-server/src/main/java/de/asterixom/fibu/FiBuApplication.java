@@ -2,6 +2,7 @@ package de.asterixom.fibu;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 
 @SpringBootApplication
 public class FiBuApplication {
@@ -10,4 +11,9 @@ public class FiBuApplication {
 		SpringApplication.run(FiBuApplication.class, args);
 	}
 
+    public void configure(WebSecurity web) throws Exception {
+        web
+            .ignoring()
+            .antMatchers("/h2-console/**");
+    }
 }
