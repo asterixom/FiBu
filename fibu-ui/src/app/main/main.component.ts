@@ -14,8 +14,7 @@ export class MainComponent implements OnInit {
 
   ngOnInit(): void {
     this.mainService.hello().subscribe(result=> {
-        console.log(this.content);
-        this.content = result.toString();
+        this.content = result.text;
       }
     );
   }

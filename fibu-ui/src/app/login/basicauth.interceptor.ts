@@ -15,7 +15,7 @@ export class BasicAuthInterceptor implements HttpInterceptor {
         // add header with basic auth credentials if user is logged in and request is to the api url
         const authorization = this.authenticationService.authorization;
         const isLoggedIn = authorization != null;
-        const isApiUrl = request.url.startsWith(environment.baseUrl);
+        const isApiUrl = request.url.startsWith(environment.apiUrl) || request.url.startsWith(environment.filesUrl);
         if (isLoggedIn && isApiUrl) {
             request = request.clone({
                 setHeaders: { 
@@ -26,7 +26,7 @@ export class BasicAuthInterceptor implements HttpInterceptor {
 
         return next.handle(request).pipe(catchError(err => {
             if(err.status==403 || err.status==401){
-                this.authenticationService.logout();
+                this.authenticationService.clear();
                 this.router.navigateByUrl('/login');
               }
 

@@ -11,7 +11,6 @@ import lombok.extern.log4j.Log4j2;
 @ConfigurationProperties("fibu")
 @Data
 @Component
-@Log4j2
 public class FiBuProperties {
 	
 	@NotBlank

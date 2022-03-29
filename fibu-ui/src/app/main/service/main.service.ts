@@ -14,6 +14,6 @@ export class MainService {
   constructor(private http: HttpClient) { }
 
   hello(){
-    return this.http.get<HelloWorldData>(env.baseUrl+'/hello');
+    return this.http.get<HelloWorldData>(env.apiUrl+'/hello');
   }
 }

@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +27,7 @@ import lombok.extern.log4j.Log4j2;
 @RestController
 @RequiredArgsConstructor
 @Log4j2
+@RequestMapping("/files")
 public class FileEndpoint {
 
 	private final FiBuProperties properties;
@@ -38,7 +40,7 @@ public class FileEndpoint {
 		if(!rootPath.toFile().exists()) rootPath.toFile().mkdirs();
 	}
 
-	@PutMapping("/files")
+	@PutMapping("/")
 	public ResponseEntity<Void> upload(@RequestParam("file") MultipartFile file){
 		try {
 			Files.copy(file.getInputStream(), rootPath.resolve(file.getOriginalFilename()));
@@ -49,7 +51,7 @@ public class FileEndpoint {
 		return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).build();
 	}
 	
-	@GetMapping("/files/{filename:.+}")
+	@GetMapping("/{filename:.+}")
 	public ResponseEntity<Resource> getFile(@PathVariable String filename) {
 		try {
 		      Path file = Path.of(properties.getPath(), filename);

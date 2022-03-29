@@ -3,6 +3,7 @@ package de.asterixom.fibu;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 
 @Configuration
 public class FibuSecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -12,20 +13,22 @@ public class FibuSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		// @formatter:off
 		http
 			.authorizeRequests()
-				.antMatchers("/**").authenticated()
-				.antMatchers("/h2/**").permitAll()
+				.antMatchers("/api/**").authenticated()
+				.antMatchers("/files/**").authenticated()
+				.antMatchers("/**").permitAll()
 			.and()
-				.httpBasic()
+				.httpBasic().authenticationEntryPoint(new Http403ForbiddenEntryPoint())
+			.and()
+				.logout().logoutSuccessHandler((request, response, authentication) -> {
+                    response.setStatus(200);
+                })
 //			.and()
 //				.formLogin()
 			.and()
 				.headers().frameOptions().disable()
 			.and()
-				.csrf().disable();
-		
+				.csrf().disable()
+				.cors().disable();
 		// @formatter:on
-
-		http.cors().disable();
-		http.headers().frameOptions().disable();
 	}
 }

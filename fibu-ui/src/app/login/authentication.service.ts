@@ -1,5 +1,7 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +14,7 @@ export class AuthenticationService {
 
   private readonly key = 'authorization';
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private http: HttpClient) {
     this.authorization = localStorage.getItem(this.key);
   }
 
@@ -24,9 +26,17 @@ export class AuthenticationService {
     this.router.navigateByUrl('');
   }
 
-  logout(){
+  clear() {
     this.authorization = null;
     localStorage.removeItem(this.key);
-    this.router.navigateByUrl('login');
+  }
+
+  logout(){
+    this.clear()
+    this.http.get("/logout").subscribe(r=>{
+      this.router.navigateByUrl('login');
+    },err=>{
+      this.router.navigateByUrl('login');
+    });
   }
 }
