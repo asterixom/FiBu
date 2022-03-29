@@ -1,13 +1,20 @@
-<div class="container">
+<div class="container pt-5">
     
     <form class="login-form">
-        <mat-form-field class="row" appearance="fill">
+      <div class="row justify-content-md-center">
+        <mat-form-field class="row col-12 col-lg-6" appearance="fill">
             <mat-label>User</mat-label>
-            <input matInput placeholder="" value="">
+            <input matInput placeholder="" [(ngModel)]="user" name="user">
         </mat-form-field>
-        <mat-form-field class="" appearance="fill">
-          <mat-label>Leave a comment</mat-label>
-          <textarea matInput placeholder="Ex. It makes me feel..."></textarea>
+      </div>
+      <div class="row justify-content-md-center">
+        <mat-form-field class="row col-12 col-lg-6" appearance="fill">
+          <mat-label>Password</mat-label>
+          <input matInput type="password" placeholder="" [(ngModel)]="pass" name="pass">
         </mat-form-field>
-      </form>
+      </div>
+      <div class="row justify-content-md-center">
+        <button mat-raised-button class="row col-10 col-sm-6 col-lg-3" color="primary" (click)="login()">Login</button>
+      </div>
+    </form>
 </div>

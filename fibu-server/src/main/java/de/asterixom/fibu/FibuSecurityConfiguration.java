@@ -10,12 +10,22 @@ public class FibuSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// @formatter:off
-		http.authorizeRequests()
-//			.antMatchers("/").permitAll()
-			.antMatchers("/h2-console/**").permitAll();
+		http
+			.authorizeRequests()
+				.antMatchers("/**").authenticated()
+				.antMatchers("/h2/**").permitAll()
+			.and()
+				.httpBasic()
+//			.and()
+//				.formLogin()
+			.and()
+				.headers().frameOptions().disable()
+			.and()
+				.csrf().disable();
+		
 		// @formatter:on
 
-		http.csrf().disable();
+		http.cors().disable();
 		http.headers().frameOptions().disable();
 	}
 }

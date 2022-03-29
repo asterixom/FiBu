@@ -1,6 +1,7 @@
 spring:
   security:
     user:
+      name: admin
       password: geheim
   jpa:
     hibernate:

@@ -10,10 +10,4 @@ public class FiBuApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(FiBuApplication.class, args);
 	}
-
-    public void configure(WebSecurity web) throws Exception {
-        web
-            .ignoring()
-            .antMatchers("/h2-console/**");
-    }
 }

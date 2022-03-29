@@ -11,16 +11,9 @@ import { Observable, throwError } from 'rxjs';
 })
 export class MainService {
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient) { }
 
   hello(){
-    return this.http.get<HelloWorldData>(env.baseUrl+'/hello').pipe(
-      catchError(error => {
-        if(error.status==403 || error.status==401){
-          this.router.navigateByUrl('/login');
-        }
-        return throwError(error);
-      })
-    );
+    return this.http.get<HelloWorldData>(env.baseUrl+'/hello');
   }
 }
