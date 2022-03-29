@@ -1,14 +1,14 @@
-<div class="container w-100">
-    <div class="row w-100 bg-primary py-2">
-        <div class="col-1">
+<div class="container w-100 py-0 border h-100 px-0">
+    <div class="row w-100 bg-primary py-2 px-4 m-0">
+        <div class="float-left">
             <button mat-mini-fab (click)="home()"><mat-icon>home</mat-icon></button>
         </div>
         <div class="col"></div>
-        <div class="col-1">
+        <div class="float-right">
             <button mat-mini-fab (click)="logout()"><mat-icon>lock</mat-icon></button>
         </div>
     </div>
-    <div class="row w-100">
+    <div class="row w-100 m-0 px-1">
         <div class="col-12">
             <router-outlet class="col-12"></router-outlet>
         </div>
