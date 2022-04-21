@@ -9,11 +9,22 @@ import { AuthenticationService } from './login/authentication.service';
 })
 export class AppComponent {
   title = 'fibu-ui';
+  expandedMenu = true;
+
+  menuItems = [
+    // {name:'Home', path: '/'},
+    // {name:'Login', path: 'login'},
+    {name:'Buchungen', path:'buchungen'}
+  ];
 
   constructor(private router: Router, private authenticationService: AuthenticationService) {}
 
   home(){
     this.router.navigateByUrl('');
+  }
+
+  navigate(url: string) {
+    this.router.navigateByUrl(url);
   }
 
   logout(){

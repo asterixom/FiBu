@@ -1,0 +1,51 @@
+.mat-column-nummer {
+     flex: 1 0 50px;
+     justify-content: center;
+    // min-width: 20px;
+}
+
+.mat-column-datum {
+    flex: 1 1 70px;
+}
+
+.mat-column-beschreibung {
+    flex: 3 2 60%;
+    overflow-wrap: break-word;
+}
+
+.mat-column-wert {
+    flex: 1 0 100px;
+    justify-content: right;
+    padding-right: 1em;
+}
+
+.mat-column-konto {
+    flex: 2 1 20%;
+}
+
+.mat-cell, .mat-header-cell{
+    padding-left: 1em;
+    // padding-right: 1em;
+}
+
+.negativeNumber {
+    color: red;
+}
+
+.mat-header-cell {
+    justify-content: center;
+}
+
+.mat-header-cell:hover {
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.mat-row:hover {
+    background-color: rgb(235, 235, 235);
+    cursor: pointer;
+}
+
+.mat-row{
+    transition: 100ms background-color;
+}

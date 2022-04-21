@@ -1,0 +1,45 @@
+<div container class="pb-4">
+    <div row>
+        <div col>
+            <h2>Buchungen</h2>
+        </div>
+        <div class="float-right">
+            <button mat-raised-button color="primary" (click)="neueBuchung()"><mat-icon>add</mat-icon> neue Buchung</button>
+        </div>
+    </div>
+    <div row>
+        <div col>
+            <mat-table [dataSource]="dataSource" class="w-100" matSort>
+                  <ng-container matColumnDef="nummer">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>No.</mat-header-cell>
+                    <mat-cell *matCellDef="let buchung">{{buchung.nummer | number: '3.0-0'}}</mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="datum">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Datum</mat-header-cell>
+                    <mat-cell *matCellDef="let buchung">{{buchung.datum | date:'dd. MMM'}}</mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="beschreibung">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Beschreibung</mat-header-cell>
+                    <mat-cell *matCellDef="let buchung">{{buchung.beschreibung}}</mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="wert">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Wert</mat-header-cell>
+                    <mat-cell *matCellDef="let buchung" [ngClass]="buchung.wert<0?'negativeNumber':''">{{buchung.wert | number: '1.2-2'}}&nbsp;€</mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="konto">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Konto</mat-header-cell>
+                    <mat-cell *matCellDef="let buchung">{{buchung.konto.name}}</mat-cell>
+                  </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row (click)="clickedRow(row)" *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                    <!-- [class.demo-row-is-clicked]="clickedRows.has(row)" -->
+            </mat-table>
+            <mat-paginator 
+                [pageSizeOptions]="[5, 10, 25, 100, 500]"
+                [pageSize]="25"
+                showFirstLastButtons 
+                aria-label="Seite auswählen" class="">
+            </mat-paginator>
+        </div>
+    </div>
+</div>

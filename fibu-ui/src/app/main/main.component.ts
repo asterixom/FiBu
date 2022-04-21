@@ -8,13 +8,13 @@ import { MainService } from './service/main.service';
 })
 export class MainComponent implements OnInit {
 
-  content = '';
+  hello = '';
   constructor(private mainService: MainService){
   }
 
   ngOnInit(): void {
     this.mainService.hello().subscribe(result=> {
-        this.content = result.text;
+        this.hello = result.text;
       }
     );
   }
