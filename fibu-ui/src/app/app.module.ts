@@ -7,7 +7,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LoginComponent } from './login/login.component';
 import { MainComponent } from './main/main.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input'
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
@@ -15,12 +15,21 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatIconModule } from '@angular/material/icon';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BasicAuthInterceptor } from './login/basicauth.interceptor';
-import { BuchungslisteComponent } from './buchungsliste/buchungsliste.component';
+import { BuchungslisteComponent } from './buchung/liste/buchungsliste.component';
 import { ContainerDirective } from './directives/bootstrap/container.directive';
 import { RowDirective } from './directives/bootstrap/row.directive';
 import { ColDirective } from './directives/bootstrap/col.directive';
 import { MatSortModule } from '@angular/material/sort';
-import { BuchungComponent } from './buchung/buchung.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { BuchungComponent } from './buchung/view/buchung.component';
+import { NeueBuchungComponent } from './buchung/neu/neu.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
+import { MAT_DATE_FORMATS } from '@angular/material/core';
+import { CurrencyMaskModule } from 'ng2-currency-mask';
+import { KontoPipe } from './buchung/konto.pipe';
 
 @NgModule({
   declarations: [
@@ -31,7 +40,9 @@ import { BuchungComponent } from './buchung/buchung.component';
     ContainerDirective,
     RowDirective,
     ColDirective,
-    BuchungComponent
+    BuchungComponent,
+    NeueBuchungComponent,
+    KontoPipe,
   ],
   imports: [
     BrowserModule,
@@ -45,10 +56,30 @@ import { BuchungComponent } from './buchung/buchung.component';
     MatIconModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    MatProgressSpinnerModule,
+    MatDatepickerModule,
+    MatMomentDateModule,
+    CurrencyMaskModule,
+    MatSlideToggleModule,
+    MatAutocompleteModule,
+    ReactiveFormsModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
+    { provide: MAT_DATE_FORMATS, useValue: 
+      {
+        parse: {
+          dateInput: 'DD.MM.YYYY',
+        },
+        display: {
+          dateInput: 'DD.MM.YYYY',
+          monthYearLabel: 'MMMM YYYY',
+          dateA11yLabel: 'LL',
+          monthYearA11yLabel: 'MMMM YYYY'
+        },
+      }
+    },
   ],
   bootstrap: [AppComponent]
 })

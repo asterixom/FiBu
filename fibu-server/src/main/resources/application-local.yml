@@ -3,8 +3,10 @@ spring:
     user:
       name: admin
       password: geheim
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
   flyway:
-    clean-on-validation-error: true
+    clean-on-validation-error: false
+#  jpa:
+#    show-sql: true
+logging:
+  level:
+    de.asterixom.fibu: DEBUG

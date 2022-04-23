@@ -14,7 +14,7 @@ export class AppComponent {
   menuItems = [
     // {name:'Home', path: '/'},
     // {name:'Login', path: 'login'},
-    {name:'Buchungen', path:'buchungen'}
+    {name:'Buchungen', path:'buchung'}
   ];
 
   constructor(private router: Router, private authenticationService: AuthenticationService) {}

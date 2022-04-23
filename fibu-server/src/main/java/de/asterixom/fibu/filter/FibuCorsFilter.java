@@ -24,7 +24,7 @@ public class FibuCorsFilter extends HttpFilter {
 		if(origin != null) {
 			response.addHeader("Access-Control-Allow-Origin", origin);
 			response.addHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
-			response.addHeader("Access-Control-Allow-Headers", "authorization");
+			response.addHeader("Access-Control-Allow-Headers", "authorization,content-type");
 			response.addHeader("Access-Control-Allow-Credentials", "true");
 			response.addHeader("Access-Control-Max-Age", "3600");
 			if("OPTIONS".equals(request.getMethod())) {

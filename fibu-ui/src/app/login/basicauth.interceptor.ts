@@ -29,9 +29,7 @@ export class BasicAuthInterceptor implements HttpInterceptor {
                 this.authenticationService.clear();
                 this.router.navigateByUrl('/login');
               }
-
-            const error = err.error.message || err.statusText;
-            return throwError(error);
+            return throwError(err);
         }))
     }
 }

@@ -1,5 +1,5 @@
 <div container class="pb-4">
-    <div row>
+    <div row class="pb-4">
         <div col>
             <h2>Buchungen</h2>
         </div>
@@ -10,25 +10,25 @@
     <div row>
         <div col>
             <mat-table [dataSource]="dataSource" class="w-100" matSort>
-                  <ng-container matColumnDef="nummer">
+                  <ng-container matColumnDef="buchungsnummer">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>No.</mat-header-cell>
-                    <mat-cell *matCellDef="let buchung">{{buchung.nummer | number: '3.0-0'}}</mat-cell>
+                    <mat-cell *matCellDef="let buchung">{{buchung.buchungsnummer | number: '3.0-0'}}</mat-cell>
                   </ng-container>
                   <ng-container matColumnDef="datum">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Datum</mat-header-cell>
                     <mat-cell *matCellDef="let buchung">{{buchung.datum | date:'dd. MMM'}}</mat-cell>
                   </ng-container>
-                  <ng-container matColumnDef="beschreibung">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Beschreibung</mat-header-cell>
-                    <mat-cell *matCellDef="let buchung">{{buchung.beschreibung}}</mat-cell>
+                  <ng-container matColumnDef="name">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+                    <mat-cell *matCellDef="let buchung">{{buchung.name}}</mat-cell>
                   </ng-container>
-                  <ng-container matColumnDef="wert">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Wert</mat-header-cell>
-                    <mat-cell *matCellDef="let buchung" [ngClass]="buchung.wert<0?'negativeNumber':''">{{buchung.wert | number: '1.2-2'}}&nbsp;€</mat-cell>
+                  <ng-container matColumnDef="betrag">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Betrag</mat-header-cell>
+                    <mat-cell *matCellDef="let buchung" [ngClass]="buchung.betrag<0?'negativeNumber':''">{{buchung.betrag | number: '1.2-2'}}&nbsp;€</mat-cell>
                   </ng-container>
                   <ng-container matColumnDef="konto">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Konto</mat-header-cell>
-                    <mat-cell *matCellDef="let buchung">{{buchung.konto.name}}</mat-cell>
+                    <mat-cell *matCellDef="let buchung">{{buchung.hauptkonto | konto}}</mat-cell>
                   </ng-container>
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                 <mat-row (click)="clickedRow(row)" *matRowDef="let row; columns: displayedColumns;"></mat-row>

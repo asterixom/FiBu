@@ -1,0 +1,72 @@
+<div container class="page">
+    <div row *ngIf="error">
+        <div col>{{error}}</div>
+    </div>
+    <div>
+        <div row class="pb-4">
+            <h2 col>Neue Buchung vornehmen</h2>
+        </div>
+        <form (ngSubmit)="submit()">
+            <div row>
+                <div class="col-12 col-md-6 py-2">
+                    <mat-form-field class="" appearance="fill">
+                        <mat-label>Name</mat-label>
+                        <input matInput required placeholder="" type="text" [(ngModel)]="buchung.name" name="name">
+                    </mat-form-field>
+                </div>
+                <div class="col-12 col-md-6 py-2">
+                    <mat-form-field class="" appearance="fill">
+                        <mat-label>Datum</mat-label>
+                        <input matInput required [matDatepicker]="picker" placeholder="DD.MM.YYYY" [(ngModel)]="buchung.datum" name="datum">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div row>
+                <div class="col py-2">
+                    <mat-form-field class="" appearance="fill">
+                        <mat-label>Beschreibung</mat-label>
+                        <textarea matInput [(ngModel)]="buchung.beschreibung" name="beschreibung"></textarea>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div row>
+                <div class="col-12 col-md-6 py-2">
+                    <mat-form-field class="" appearance="fill">
+                        <mat-label>Betrag</mat-label>
+                        <input matInput currencyMask required placeholder="0 €" [options]="{prefix: '', suffix: ' €', allowNegative: false}" [(ngModel)]="buchung.betrag" name="betrag">
+                    </mat-form-field>
+                </div>
+                <div class="col-12 col-md-6 pt-2 pt-md-4 pb-2 mt-0 pl-4">
+                    <mat-label class="pr-2">Ausgabe</mat-label>
+                    <mat-slide-toggle color="primary" [(ngModel)]="ausgabeEinnahme" name="ausgabeEinnahme"></mat-slide-toggle>
+                    <mat-label class="pl-2">Einnahme</mat-label>
+                </div>
+            </div>
+            <div row>
+                <div class="col">
+                    <mat-form-field class="" appearance="fill">
+                        <mat-label>Konto</mat-label>
+                        <input matInput required placeholder="" type="text" [formControl]="kontoControl" name="konto" [matAutocomplete]="auto" (keydown.tab)="selectFirst()">
+                        <mat-autocomplete autoActiveFirstOption  #auto="matAutocomplete" [displayWith]="kontoDisplayFn" (optionActivated)="select($event)">
+                            <mat-option *ngFor="let option of kontenFiltered | async" [value]="option">
+                                <div class="row">
+                                    <div class="col-12 col-md-6 col-xl-4" style="line-height: normal;">{{option | konto}}</div>
+                                    <div class="col-12 col-md-6 col-xl-8" style="font-size: x-small; white-space: normal; line-height: 1em; align-self: center;" *ngIf="option.beschreibung">{{option.beschreibung}}</div>
+                                </div>
+                                <!-- <div *ngIf="!option.beschreibung">{{option | konto}}</div> -->
+                                <!-- {{option | konto}} -->
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div row>
+                <div col>
+                    <button mat-raised-button class="row col-10 col-sm-6 col-lg-3" color="primary" type="submit">Buchen</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
