@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Buchung } from '../model/buchung.interface';
 import { BuchungService } from '../buchung.service';
-import { Konto } from '../model/konto.interface';
+import { Konto } from '../../konto/model/konto.interface';
 import { FormControl } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { KontoPipe } from '../konto.pipe';
 import { MatAutocompleteActivatedEvent } from '@angular/material/autocomplete';
+import { KontoService } from 'src/app/konto/konto.service';
 
 @Component({
   selector: 'app-neu',
@@ -30,10 +31,10 @@ export class NeueBuchungComponent implements OnInit {
   buchung: Buchung = {
   }
 
-  constructor(private service: BuchungService, private router: Router) { }
+  constructor(private buchungService: BuchungService, private kontoService: KontoService, private router: Router) { }
 
   ngOnInit(): void {
-    this.service.konten().subscribe(
+    this.kontoService.konten().subscribe(
       konten => {
         this.konten=konten;
         this.kontenFiltered = this.kontoControl.valueChanges.pipe(
@@ -85,7 +86,7 @@ export class NeueBuchungComponent implements OnInit {
       finalBuchung.betrag = finalBuchung.betrag * -1
     }
     console.log(finalBuchung);
-    this.service.save(finalBuchung).subscribe(
+    this.buchungService.save(finalBuchung).subscribe(
       result => this.router.navigateByUrl('/buchung/'+result.buchungsnummer)
     );
   }

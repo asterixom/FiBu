@@ -1,4 +1,4 @@
-import { Konto } from "./konto.interface";
+import { Konto } from "../../konto/model/konto.interface";
 
 export interface Buchung {
     buchungsnummer?: number;

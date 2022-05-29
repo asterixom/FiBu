@@ -1,5 +1,5 @@
 import { Injectable, Pipe, PipeTransform } from '@angular/core';
-import { Konto } from './model/konto.interface';
+import { Konto } from '../konto/model/konto.interface';
 
 @Pipe({
   name: 'konto'

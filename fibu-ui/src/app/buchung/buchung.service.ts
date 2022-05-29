@@ -2,28 +2,26 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Buchung } from './model/buchung.interface';
 import { environment as env } from 'src/environments/environment';
-import { Konto } from './model/konto.interface';
+import { Konto } from '../konto/model/konto.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BuchungService {
 
+  private readonly endpoint = env.apiUrl+'/buchungen';
+
   constructor(private http: HttpClient) { }
 
   buchungen(){
-    return this.http.get<Buchung[]>(env.apiUrl+'/buchung');
+    return this.http.get<Buchung[]>(this.endpoint);
   }
 
   buchung(id: string){
-    return this.http.get<Buchung>(env.apiUrl+'/buchung/'+id);
+    return this.http.get<Buchung>(this.endpoint+'/'+id);
   }
-
-  konten(){
-    return this.http.get<Konto[]>(env.apiUrl+'/konto');
-  }
-
+  
   save(buchung: Buchung){
-    return this.http.put<Buchung>(env.apiUrl+'/buchung', buchung);
+    return this.http.put<Buchung>(this.endpoint, buchung);
   }
 }

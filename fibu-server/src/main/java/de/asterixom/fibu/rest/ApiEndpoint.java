@@ -43,19 +43,19 @@ public class ApiEndpoint {
 	}
 	
 	
-	@GetMapping("/buchung")
+	@GetMapping("/buchungen")
 	public ResponseEntity<List<Buchung>> buchungen(){
 		List<Buchung> buchungen = buchungsRepository.findAll().stream().map(ModelConverter::convert).collect(Collectors.toList());
 		return ResponseEntity.ok(buchungen);
 	}
 	
-	@GetMapping("/buchung/{id}")
+	@GetMapping("/buchungen/{id}")
 	public ResponseEntity<Buchung> buchung(@PathVariable("id") @NotNull String id){
 		log.debug("Called /buchung/"+id);
 		return ResponseEntity.of(buchungsRepository.findById(Integer.valueOf(id)).map(ModelConverter::convert));
 	}
 	
-	@PutMapping("/buchung")
+	@PutMapping("/buchungen")
 	public ResponseEntity<Buchung> buchung(@RequestBody @NotNull @Valid Buchung buchung){
 		BuchungsEntity buchungsEntity = null;
 		// Wenn eine Buchungsnummer übergeben wird:
@@ -86,7 +86,7 @@ public class ApiEndpoint {
 		return ResponseEntity.ok(ModelConverter.convert(buchungsEntity));
 	}
 	
-	@GetMapping("konto")
+	@GetMapping("konten")
 	public ResponseEntity<List<Konto>> konto(){
 		return ResponseEntity.ok(kontenRepository.findAll().stream().map(ModelConverter::convert).collect(Collectors.toList()));
 	}
