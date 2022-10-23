@@ -30,6 +30,7 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MAT_DATE_FORMATS } from '@angular/material/core';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { KontoPipe } from './buchung/konto.pipe';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import { KontoPipe } from './buchung/konto.pipe';
     CurrencyMaskModule,
     MatSlideToggleModule,
     MatAutocompleteModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatProgressBarModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },

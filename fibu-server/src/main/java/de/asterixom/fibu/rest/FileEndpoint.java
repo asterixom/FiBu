@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import de.asterixom.fibu.properties.FiBuProperties;
+import de.asterixom.fibu.rest.model.File;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -41,14 +43,32 @@ public class FileEndpoint {
 	}
 
 	@PutMapping("/")
-	public ResponseEntity<Void> upload(@RequestParam("file") MultipartFile file){
+	public ResponseEntity<File> upload(@RequestParam("file") MultipartFile file){
 		try {
-			Files.copy(file.getInputStream(), rootPath.resolve(file.getOriginalFilename()));
+			String fileName = "", fileType = "", uuid = UUID.randomUUID().toString();
+			String origName = file.getOriginalFilename();
+			int dotPos = origName.lastIndexOf('.');
+			if(dotPos > 0) {
+				fileName=origName.substring(0, dotPos);
+			}else{
+				fileName=origName;
+			}
+			if(dotPos > 0 && dotPos < origName.length()-1) {
+				fileType=origName.substring(dotPos+1);
+			}
+			File resultFile = File.builder()//
+				.uuid(uuid)//
+				.filename(origName)//
+				.name(fileName)//
+				.contenttype(file.getContentType())//
+				.filetype(fileType)//
+				.build();
+			Files.copy(file.getInputStream(), rootPath.resolve(uuid+(fileType.length()>0?"."+fileType:"")));
+			return ResponseEntity.ok(resultFile);
 		} catch (IOException e) {
 			log.error(e);
 			return ResponseEntity.internalServerError().build();
 		}
-		return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).build();
 	}
 	
 	@GetMapping("/{filename:.+}")

@@ -6,7 +6,7 @@
         <div class="menu-spacer"></div>
         <ng-container *ngIf="expandedMenu">
             <div *ngFor="let menuItem of menuItems" class="pr-1">
-                <button mat-raised-button class="menu-button h-100" color="accent" (click)="navigate(menuItem.path)">{{menuItem.name}}</button>
+                <button mat-raised-button class="menu-button h-100" [color]="(currentMenuItem|async) == '/'+menuItem.path?'primary':'accent'" (click)="navigate(menuItem.path)">{{menuItem.name}}</button>
             </div>
         </ng-container>
         <div col></div>

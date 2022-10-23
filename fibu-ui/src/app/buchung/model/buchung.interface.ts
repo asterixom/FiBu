@@ -1,3 +1,4 @@
+import { UploadedFile } from "../../files/model/file.interface";
 import { Konto } from "../../konto/model/konto.interface";
 
 export interface Buchung {
@@ -7,10 +8,5 @@ export interface Buchung {
     beschreibung?: string;
     betrag?: number;
     hauptkonto?: Konto;
-    belege?: {
-      id: string,
-      filename: string,
-      name?: string,
-      beschreibung?: string
-    }[];
+    belege: UploadedFile[];
   }
