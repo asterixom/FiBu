@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -18,7 +18,7 @@ export class FileService {
     const formData: FormData = new FormData();
     formData.append('file', file);
    
-    return this.http.put(this.endpoint, formData).pipe(map(res => res as UploadedFile));
+    return this.http.put<UploadedFile>(this.endpoint, formData);
   }
 
   getUrl(file: UploadedFile){

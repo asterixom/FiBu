@@ -3,3 +3,5 @@
 **/*.mv.db
 **/*.trace.db
 **/*.private.sql
+**/*-private.yml
+**/debug.log

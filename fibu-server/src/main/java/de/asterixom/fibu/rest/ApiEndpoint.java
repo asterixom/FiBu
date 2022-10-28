@@ -22,8 +22,8 @@ import de.asterixom.fibu.data.BuchungsRepository;
 import de.asterixom.fibu.data.KontenRepository;
 import de.asterixom.fibu.data.model.BuchungsEntity;
 import de.asterixom.fibu.data.model.KontoEntity;
+import de.asterixom.fibu.properties.FiBuProperties;
 import de.asterixom.fibu.rest.model.Buchung;
-import de.asterixom.fibu.rest.model.HelloWorldData;
 import de.asterixom.fibu.rest.model.Konto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -36,12 +36,7 @@ public class ApiEndpoint {
 
 	private final BuchungsRepository buchungsRepository;
 	private final KontenRepository kontenRepository;
-	
-	@GetMapping("/hello")
-	public ResponseEntity<HelloWorldData> helloWorld(){
-		return ResponseEntity.ok(HelloWorldData.builder().build());
-	}
-	
+	private final FiBuProperties properties;
 	
 	@GetMapping("/buchungen")
 	public ResponseEntity<List<Buchung>> buchungen(){
@@ -71,23 +66,38 @@ public class ApiEndpoint {
 		} else {
 			buchungsEntity = ModelConverter.convert(buchung);
 		}
-		// Wenn ein Hauptkonto übergeben wird
-		if(buchung.getHauptkonto() != null) {
-			Optional<KontoEntity> konto = kontenRepository.findById(buchung.getHauptkonto().getId());
-			// Wenn das übergebene Hauptkonto nicht existiert, wird ein Fehler geworfen.
-			if(konto.isEmpty()) {
-				throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Angegebenes Hauptkonto ist nicht vorhanden!");
-			}
-			// Bei gültigem Hauptkonto wird dieses mit der Buchung verknüpft (ersetzt)
-			buchungsEntity.setHauptkonto(konto.get());
+		
+		// Hauptkonto prüfen
+		Optional<KontoEntity> hauptkonto = kontenRepository.findById(buchung.getHauptkonto().getId());
+		// Wenn das übergebene Hauptkonto nicht existiert, wird ein Fehler geworfen.
+		if(hauptkonto.isEmpty()) {
+			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Angegebenes Hauptkonto ist nicht vorhanden!");
 		}
+		// Bei gültigem Hauptkonto wird dieses mit der Buchung verknüpft (ersetzt)
+		buchungsEntity.setHauptkonto(hauptkonto.get());
+		
+		// Gegenkonto prüfen
+		Optional<KontoEntity> gegenkonto = kontenRepository.findById(buchung.getGegenkonto().getId());
+		// Wenn das übergebene Gegenkonto nicht existiert, wird ein Fehler geworfen.
+		if(gegenkonto.isEmpty()) {
+			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Angegebenes Gegenkonto ist nicht vorhanden!");
+		}
+		// Bei gültigem Gegenkonto wird dieses mit der Buchung verknüpft (ersetzt)
+		buchungsEntity.setGegenkonto(gegenkonto.get());
+		
+		
 		// Buchung speichern und Ergebnis zurückgeben
 		buchungsEntity = buchungsRepository.save(buchungsEntity);
 		return ResponseEntity.ok(ModelConverter.convert(buchungsEntity));
 	}
 	
-	@GetMapping("konten")
+	@GetMapping("/konten")
 	public ResponseEntity<List<Konto>> konto(){
 		return ResponseEntity.ok(kontenRepository.findAll().stream().map(ModelConverter::convert).collect(Collectors.toList()));
+	}
+	
+	@GetMapping("/konten/standardGegenkonto")
+	public ResponseEntity<Konto> standardGegenkonto(){
+		return ResponseEntity.of(kontenRepository.findById(properties.getStandardGegenkonto()).map(ModelConverter::convert));
 	}
 }

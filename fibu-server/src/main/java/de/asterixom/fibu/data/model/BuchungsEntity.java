@@ -45,4 +45,8 @@ public class BuchungsEntity implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="hauptkonto", nullable=false)
 	KontoEntity hauptkonto;
+	
+	@ManyToOne
+	@JoinColumn(name="gegenkonto", nullable=false)
+	KontoEntity gegenkonto;
 }

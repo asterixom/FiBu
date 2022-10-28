@@ -3,10 +3,11 @@ import { Konto } from "../../konto/model/konto.interface";
 
 export interface Buchung {
     buchungsnummer?: number;
-    datum?: string | Date;
+    datum?: Date;
     name?: string;
     beschreibung?: string;
     betrag?: number;
     hauptkonto?: Konto;
+    gegenkonto?: Konto;
     belege: UploadedFile[];
   }

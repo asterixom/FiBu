@@ -33,7 +33,10 @@
             </div>
             <div row>
                 <div class="col">
-                    <button type="button"  mat-raised-button (click)="fileInput.click()" color="primary">Beleg hochladen</button>
+                    <button type="button"  mat-raised-button (click)="fileInput.click()" color="primary">
+                        <mat-progress-bar mode="determinate" [hidden]="!uploadProgress" [value]="uploadProgress" class="mt-n1 mx-2 px-0"></mat-progress-bar>
+                        Beleg hochladen
+                    </button>
                     <input hidden (change)="onSelectionChangedEvent($event)" #fileInput multiple type="file" id="file">
                 </div>
             </div>
@@ -65,21 +68,12 @@
                 </div>
             </div>
             <div row>
-                <div class="col">
-                    <mat-form-field class="" appearance="fill">
-                        <mat-label>Konto</mat-label>
-                        <input matInput required placeholder="" type="text" [formControl]="kontoControl" name="konto" [matAutocomplete]="auto" (keydown.tab)="selectFirst()">
-                        <mat-autocomplete autoActiveFirstOption  #auto="matAutocomplete" [displayWith]="kontoDisplayFn" (optionActivated)="select($event)">
-                            <mat-option *ngFor="let option of kontenFiltered | async" [value]="option">
-                                <div class="row">
-                                    <div class="col-12 col-md-6 col-xl-4" style="line-height: normal;">{{option | konto}}</div>
-                                    <div class="col-12 col-md-6 col-xl-8" style="font-size: x-small; white-space: normal; line-height: 1em; align-self: center;" *ngIf="option.beschreibung">{{option.beschreibung}}</div>
-                                </div>
-                                <!-- <div *ngIf="!option.beschreibung">{{option | konto}}</div> -->
-                                <!-- {{option | konto}} -->
-                            </mat-option>
-                        </mat-autocomplete>
-                    </mat-form-field>
+                <div class="col-12 col-md-6">
+                    <app-konto-selector label="Konto - {{ausgabeEinnahme?'HABEN':'SOLL'}}" [(konto)]="buchung.hauptkonto"></app-konto-selector>
+                </div>
+                <div class="col-12 col-md-6">
+                    <app-konto-selector label="Gegenkonto - {{!ausgabeEinnahme?'HABEN':'SOLL'}}" [(konto)]="buchung.gegenkonto" standardKonto></app-konto-selector>
+                    <!-- <mat-label>{{standardGegenkonto | konto}}</mat-label> -->
                 </div>
             </div>
             <div row>

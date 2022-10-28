@@ -15,4 +15,6 @@ public class FiBuProperties {
 	@NotBlank
 	private String path = "./files";
 	
+	@NotBlank
+	private int standardGegenkonto;
 }

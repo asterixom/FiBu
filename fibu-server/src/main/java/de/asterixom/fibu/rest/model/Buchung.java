@@ -27,5 +27,9 @@ public class Buchung {
 	@NotNull
 	Double betrag;
 	
+	@NotNull
 	Konto hauptkonto;
+	
+	@NotNull
+	Konto gegenkonto;
 }

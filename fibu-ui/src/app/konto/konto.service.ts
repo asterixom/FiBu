@@ -19,4 +19,8 @@ export class KontoService {
   konto(id: string){
     return this.http.get<Konto[]>(this.endpoint+'/'+id);
   }
+
+  standardGegenkonto(){
+    return this.http.get<Konto>(this.endpoint+'/standardGegenkonto');
+  }
 }

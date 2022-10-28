@@ -26,11 +26,13 @@ import { BuchungComponent } from './buchung/view/buchung.component';
 import { NeueBuchungComponent } from './buchung/neu/neu.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatMomentDateModule } from '@angular/material-moment-adapter';
+import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { MAT_DATE_FORMATS } from '@angular/material/core';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
-import { KontoPipe } from './buchung/konto.pipe';
+import { KontoPipe } from './konto/konto.pipe';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { KontoSelectorComponent } from './konto/konto-selector/konto-selector.component';
+import { StandardKontoDirective } from './konto/standard-konto.directive';
 
 @NgModule({
   declarations: [
@@ -44,6 +46,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     BuchungComponent,
     NeueBuchungComponent,
     KontoPipe,
+    KontoSelectorComponent,
+    StandardKontoDirective,
   ],
   imports: [
     BrowserModule,
@@ -82,6 +86,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
         },
       }
     },
+    { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } }
   ],
   bootstrap: [AppComponent]
 })
