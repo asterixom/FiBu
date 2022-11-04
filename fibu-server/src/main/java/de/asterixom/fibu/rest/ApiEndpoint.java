@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 
-import de.asterixom.fibu.converter.ModelConverter;
+import de.asterixom.fibu.converter.ModelMapper;
 import de.asterixom.fibu.data.BuchungsRepository;
 import de.asterixom.fibu.data.KontenRepository;
 import de.asterixom.fibu.data.model.BuchungsEntity;
@@ -37,66 +37,73 @@ public class ApiEndpoint {
 	private final BuchungsRepository buchungsRepository;
 	private final KontenRepository kontenRepository;
 	private final FiBuProperties properties;
-	
+	private final ModelMapper mapper;
+
 	@GetMapping("/buchungen")
-	public ResponseEntity<List<Buchung>> buchungen(){
-		List<Buchung> buchungen = buchungsRepository.findAll().stream().map(ModelConverter::convert).collect(Collectors.toList());
+	public ResponseEntity<List<Buchung>> buchungen() {
+		List<Buchung> buchungen = buchungsRepository.findAll()
+				.stream()
+				.map(mapper::fromEntity)
+				.collect(Collectors.toList());
 		return ResponseEntity.ok(buchungen);
 	}
-	
+
 	@GetMapping("/buchungen/{id}")
-	public ResponseEntity<Buchung> buchung(@PathVariable("id") @NotNull String id){
-		log.debug("Called /buchung/"+id);
-		return ResponseEntity.of(buchungsRepository.findById(Integer.valueOf(id)).map(ModelConverter::convert));
+	public ResponseEntity<Buchung> buchung(@PathVariable("id") @NotNull String id) {
+		log.debug("Called /buchung/" + id);
+		return ResponseEntity.of(buchungsRepository.findById(Integer.valueOf(id)).map(mapper::fromEntity));
 	}
-	
+
 	@PutMapping("/buchungen")
-	public ResponseEntity<Buchung> buchung(@RequestBody @NotNull @Valid Buchung buchung){
+	public ResponseEntity<Buchung> buchung(@RequestBody @NotNull @Valid Buchung buchung) {
 		BuchungsEntity buchungsEntity = null;
 		// Wenn eine Buchungsnummer übergeben wird:
-		if(buchung.getBuchungsnummer() != null) {
+		if (buchung.getBuchungsnummer() != null) {
 			Optional<BuchungsEntity> vorhandeneBuchung = buchungsRepository.findById(buchung.getBuchungsnummer());
 			// Bei ungültiger Nummer wird ein Fehler geworfen
-			if(vorhandeneBuchung.isEmpty()) {
-				throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Buchung Nummer "+buchung.getBuchungsnummer()+" konnte nicht gefunden werden! Update fehlgeschlagen!");
+			if (vorhandeneBuchung.isEmpty()) {
+				throw new HttpClientErrorException(HttpStatus.NOT_FOUND,
+						"Buchung Nummer " + buchung.getBuchungsnummer()
+								+ " konnte nicht gefunden werden! Update fehlgeschlagen!");
 			}
 			// Bei gültiger Nummer wird der vorhandene Eintrag aktualisiert
-			buchungsEntity = ModelConverter.update(vorhandeneBuchung.get(),buchung);
-		// Wenn keine Buchungsnummer übergeben wird - neue Buchung anlegen
+			buchungsEntity = mapper.updateEntity(buchung, vorhandeneBuchung.get());
+			// Wenn keine Buchungsnummer übergeben wird - neue Buchung anlegen
 		} else {
-			buchungsEntity = ModelConverter.convert(buchung);
+			buchungsEntity = mapper.toEntity(buchung);
 		}
-		
+
 		// Hauptkonto prüfen
 		Optional<KontoEntity> hauptkonto = kontenRepository.findById(buchung.getHauptkonto().getId());
 		// Wenn das übergebene Hauptkonto nicht existiert, wird ein Fehler geworfen.
-		if(hauptkonto.isEmpty()) {
+		if (hauptkonto.isEmpty()) {
 			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Angegebenes Hauptkonto ist nicht vorhanden!");
 		}
 		// Bei gültigem Hauptkonto wird dieses mit der Buchung verknüpft (ersetzt)
 		buchungsEntity.setHauptkonto(hauptkonto.get());
-		
+
 		// Gegenkonto prüfen
 		Optional<KontoEntity> gegenkonto = kontenRepository.findById(buchung.getGegenkonto().getId());
 		// Wenn das übergebene Gegenkonto nicht existiert, wird ein Fehler geworfen.
-		if(gegenkonto.isEmpty()) {
+		if (gegenkonto.isEmpty()) {
 			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Angegebenes Gegenkonto ist nicht vorhanden!");
 		}
 		// Bei gültigem Gegenkonto wird dieses mit der Buchung verknüpft (ersetzt)
 		buchungsEntity.setGegenkonto(gegenkonto.get());
-		
+
 		// Buchung speichern und Ergebnis zurückgeben
 		buchungsEntity = buchungsRepository.save(buchungsEntity);
-		return ResponseEntity.ok(ModelConverter.convert(buchungsEntity));
+		return ResponseEntity.ok(mapper.fromEntity(buchungsEntity));
 	}
-	
+
 	@GetMapping("/konten")
-	public ResponseEntity<List<Konto>> konto(){
-		return ResponseEntity.ok(kontenRepository.findAll().stream().map(ModelConverter::convert).collect(Collectors.toList()));
+	public ResponseEntity<List<Konto>> konto() {
+		return ResponseEntity
+				.ok(kontenRepository.findAll().stream().map(mapper::fromEntity).collect(Collectors.toList()));
 	}
-	
+
 	@GetMapping("/konten/standardGegenkonto")
-	public ResponseEntity<Konto> standardGegenkonto(){
-		return ResponseEntity.of(kontenRepository.findById(properties.getStandardGegenkonto()).map(ModelConverter::convert));
+	public ResponseEntity<Konto> standardGegenkonto() {
+		return ResponseEntity.of(kontenRepository.findById(properties.getStandardGegenkonto()).map(mapper::fromEntity));
 	}
 }
