@@ -1,5 +1,6 @@
 package de.asterixom.fibu.rest.model;
 
+import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -8,11 +9,13 @@ import lombok.Data;
 
 @Data
 @Builder(toBuilder = true)
-public class File {
+public class Beleg {
 	
 	@NotNull
 	@Size(max = 64)
 	String uuid;
+	
+	int belegnummer;
 	
 	@NotNull
 	@Size(max = 64)

@@ -1,0 +1,37 @@
+<div container>
+    <div row>
+        <div col class="mb-2">
+            <mat-progress-bar mode="determinate" [hidden]="!uploadProgress" [value]="uploadProgress" class="mt-n1">
+            </mat-progress-bar>
+        </div>
+    </div>
+    <div row>
+        <div class="col mb-4">
+            <button [hidden]="disabled" type="button" mat-raised-button (click)="fileInput.click()" color="primary">
+                Beleg hochladen
+            </button>
+            <input hidden (change)="onSelectionChangedEvent($event)" #fileInput multiple type="file" id="file">
+        </div>
+    </div>
+    <div row *ngFor="let beleg of belege">
+        <div class="col-1 my-2">
+            {{beleg.belegnummer}}
+        </div>
+        <div class="col-4 my-2">
+            {{beleg.filename}}
+        </div>
+        <div class="col-3">
+            <button type="button" [disabled]="disabled" mat-stroked-button (click)="downloadFile(beleg)" color="primary">
+                <mat-progress-bar mode="determinate" [hidden]="!downloads[beleg.uuid]?.progress"
+                    [value]="downloads[beleg.uuid]?.progress" class="mt-n2 mb-1 mx-0 px-0"></mat-progress-bar>Download
+            </button>
+            <a hidden [href]="downloads[beleg.uuid]?.localUrl" [download]="downloads[beleg.uuid]?.filename"
+                [id]="'dl-'+beleg.uuid" target="_blank">Save</a>
+            <button type="button" [disabled]="disabled" mat-stroked-button (click)="deleteFile(beleg)" color="warn">Löschen</button>
+
+        </div>
+        <div class="col-4">
+            {{beleg.beschreibung}}
+        </div>
+    </div>
+</div>

@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   apiUrl: 'http://localhost:8080/api',
-  filesUrl: 'http://localhost:8080/files'
+  filesUrl: 'http://localhost:8080/beleg'
 };
 
 /*

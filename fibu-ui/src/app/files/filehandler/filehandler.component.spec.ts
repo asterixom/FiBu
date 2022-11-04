@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BuchungComponent } from './buchung.component';
+import { FilehandlerComponent } from './filehandler.component';
 
-describe('BuchungComponent', () => {
-  let component: BuchungComponent;
-  let fixture: ComponentFixture<BuchungComponent>;
+describe('FilehandlerComponent', () => {
+  let component: FilehandlerComponent;
+  let fixture: ComponentFixture<FilehandlerComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BuchungComponent ]
+      declarations: [ FilehandlerComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BuchungComponent);
+    fixture = TestBed.createComponent(FilehandlerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

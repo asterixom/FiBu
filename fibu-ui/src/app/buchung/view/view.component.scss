@@ -10,3 +10,7 @@ input, mat-form-field {
 .row {
     margin-top: 1em;
 }
+
+::ng-deep .mat-input-element:disabled {
+    color: black;
+}

@@ -4,7 +4,7 @@ import { KontoPipe } from '../konto.pipe';
 import { KontoService } from '../konto.service';
 import { Konto } from '../model/konto.interface';
 import { Observable } from 'rxjs';
-import { map, startWith, filter } from 'rxjs/operators';
+import { map, startWith, filter, tap } from 'rxjs/operators';
 import { MatAutocompleteActivatedEvent } from '@angular/material/autocomplete';
 import { Input, Output, EventEmitter } from '@angular/core';
 
@@ -21,10 +21,29 @@ export class KontoSelectorComponent implements OnInit {
   @Input()
   useStandardKonto: boolean = false;
 
+  _konto?: Konto;
+  
   @Input()
-  konto?: Konto;
+  set konto(k: Konto | undefined){
+    this._konto=k;
+    this.kontoControl.setValue(k);
+    this.kontoChange.emit(k);
+  }
+
   @Output()
   kontoChange = new EventEmitter<Konto>();
+
+  _disabled: boolean = false;
+  
+  @Input()
+  set disabled(dis: boolean){
+    this._disabled = dis;
+    if(dis){
+      this.kontoControl.disable();
+    }else{
+      this.kontoControl.enable();
+    }
+  }
 
   kontoControl = new FormControl();
   konten?: Konto[];
@@ -35,6 +54,7 @@ export class KontoSelectorComponent implements OnInit {
   constructor(private kontoService: KontoService) { }
 
   ngOnInit(): void {
+    if(this.disabled) this.kontoControl.disable();
     this.kontoService.konten().subscribe(
       konten => {
         this.konten=konten;
@@ -48,8 +68,14 @@ export class KontoSelectorComponent implements OnInit {
         });
         if(this.useStandardKonto){
           this.kontoService.standardGegenkonto().subscribe(
-            konto => this.kontoControl.setValue(konto)
+            konto => {
+              this.kontoControl.setValue(konto);
+              this.kontoChanged(konto);
+            }
           )
+        }
+        if(this.konto){
+          this.kontoControl.setValue(this.konto);
         }
       }
     );
@@ -74,7 +100,7 @@ export class KontoSelectorComponent implements OnInit {
 
   kontoChanged(konto?: Konto){
     this.selected = konto;
-    this.konto = konto;
+    this._konto = konto;
     this.kontoChange.emit(konto);
   }
 
@@ -93,7 +119,7 @@ export class KontoSelectorComponent implements OnInit {
   }
 
   isKonto(obj: any): obj is Konto {
-    return typeof obj === 'object' && 'id' in obj && 'name' in obj;
+    return obj != null && typeof obj === 'object' && 'id' in obj && 'name' in obj;
   }
 
 }

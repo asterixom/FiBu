@@ -17,7 +17,7 @@ export class BuchungService {
     return this.http.get<Buchung[]>(this.endpoint);
   }
 
-  buchung(id: string){
+  buchung(id: number){
     return this.http.get<Buchung>(this.endpoint+'/'+id);
   }
   

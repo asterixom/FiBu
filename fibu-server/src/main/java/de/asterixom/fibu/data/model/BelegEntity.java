@@ -5,10 +5,17 @@ import java.sql.Blob;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import org.hibernate.validator.internal.util.stereotypes.Lazy;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +32,7 @@ public class BelegEntity implements Serializable {
 
 	@Id
 	@Column(insertable = false)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Integer belegnummer;
 	
 	@NotNull
@@ -50,6 +58,11 @@ public class BelegEntity implements Serializable {
 	@Column(nullable = true, length = 512)
 	String beschreibung;
 	
-	@Column(nullable = true)
-	Blob daten;
+	@Column(nullable = true, columnDefinition = "BLOB")
+	@Lazy
+	byte[] daten;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="buchungsnummer", nullable=false)
+	BuchungsEntity buchung;
 }

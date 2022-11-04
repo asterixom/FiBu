@@ -22,7 +22,7 @@ export class FileService {
   }
 
   getUrl(file: UploadedFile){
-    return this.endpoint+file.uuid+(file.filetype?'.'+file.filetype:'');
+    return this.endpoint+file.uuid;//+(file.filetype?'.'+file.filetype:'');
   }
 
   downloadFile(file: UploadedFile) {

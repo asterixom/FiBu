@@ -1,36 +1,24 @@
-import { Component, OnInit } from '@angular/core';
-import { Buchung } from '../model/buchung.interface';
-import { BuchungService } from '../buchung.service';
-import { Konto } from '../../konto/model/konto.interface';
-import { FormControl } from '@angular/forms';
-import { Observable, of } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
-import { Router } from '@angular/router';
-import { KontoPipe } from '../../konto/konto.pipe';
-import { MatAutocompleteActivatedEvent } from '@angular/material/autocomplete';
-import { KontoService } from '../../konto/konto.service';
-import { FileService } from '../../files/file.service';
-import { UploadedFile } from 'src/app/files/model/file.interface';
 import { HttpEventType } from '@angular/common/http';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { FileService } from '../file.service';
+import { UploadedFile } from '../model/file.interface';
 
 @Component({
-  selector: 'app-neu',
-  templateUrl: './neu.component.html',
-  styleUrls: ['./neu.component.scss']
+  selector: 'app-filehandler',
+  templateUrl: './filehandler.component.html',
+  styleUrls: ['./filehandler.component.scss']
 })
-export class NeueBuchungComponent implements OnInit {
+export class FilehandlerComponent implements OnInit {
 
-  error?: string;
+  @Output()
+  belegeChange = new EventEmitter<UploadedFile[]>();
 
+  @Input()
+  belege: UploadedFile[] = [];
 
-
-  ausgabeEinnahme = false;
-
-
-  buchung: Buchung = {
-    belege: []
-  }
+  @Input()
+  disabled: boolean = false;
 
   downloads: any = {
     // 'f519c957-16b1-4716-a10c-fde465658fd1': {
@@ -41,17 +29,26 @@ export class NeueBuchungComponent implements OnInit {
 
   uploadProgress: number | null = null;
 
-  constructor(private buchungService: BuchungService, private fileService: FileService, private router: Router, private sanitizer: DomSanitizer) { }
+  timer : any = null;
+
+  constructor(private fileService: FileService, private sanitizer: DomSanitizer) { }
 
   ngOnInit(): void {
   }
 
   onFilesSelected(files: FileList){
+    if(this.timer != null){
+      clearTimeout(this.timer);
+    }
     this.uploadProgress = 0;
     for(let fileNr in files){
       this.fileService.uploadFile(files[fileNr]).subscribe(res => {
         this.uploadProgress = (this.uploadProgress||0)+100/files.length;
-        this.buchung.belege.push(res);
+        this.belege.push(res);
+        this.belegeChange.emit(this.belege);
+        if(this.uploadProgress>99){
+          this.timer = setTimeout(()=>this.uploadProgress=null,5000);
+        }
       });
     }
   }
@@ -86,21 +83,9 @@ export class NeueBuchungComponent implements OnInit {
     }
     this.fileService.deleteFile(beleg).subscribe(data=>{
       this.downloads[beleg.uuid] = null;
-      this.buchung.belege.splice(this.buchung.belege.findIndex(b=>b.uuid==beleg.uuid),1);
+      this.belege.splice(this.belege.findIndex(b=>b.uuid==beleg.uuid),1);
+      this.belegeChange.emit(this.belege);
     });
   }
 
-  submit(){
-    let finalBuchung = this.buchung;
-    // if(this.kontoControl.value){
-    //   finalBuchung.hauptkonto = this.kontoControl.value
-    // }
-    if(!this.ausgabeEinnahme && finalBuchung.betrag){
-      finalBuchung.betrag = finalBuchung.betrag * -1
-    }
-    console.log(finalBuchung);
-    this.buchungService.save(finalBuchung).subscribe(
-      result => this.router.navigateByUrl('/buchung/'+result.buchungsnummer)
-    );
-  }
 }

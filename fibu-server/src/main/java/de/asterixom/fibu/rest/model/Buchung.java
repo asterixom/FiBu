@@ -1,7 +1,9 @@
 package de.asterixom.fibu.rest.model;
 
 import java.time.LocalDate;
+import java.util.Set;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -28,8 +30,11 @@ public class Buchung {
 	Double betrag;
 	
 	@NotNull
+	@Valid
 	Konto hauptkonto;
 	
-	@NotNull
+	@Valid
 	Konto gegenkonto;
+	
+	Set<Beleg> belege;
 }

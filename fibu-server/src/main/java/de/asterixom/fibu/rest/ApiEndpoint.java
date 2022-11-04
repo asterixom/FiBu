@@ -85,7 +85,6 @@ public class ApiEndpoint {
 		// Bei gültigem Gegenkonto wird dieses mit der Buchung verknüpft (ersetzt)
 		buchungsEntity.setGegenkonto(gegenkonto.get());
 		
-		
 		// Buchung speichern und Ergebnis zurückgeben
 		buchungsEntity = buchungsRepository.save(buchungsEntity);
 		return ResponseEntity.ok(ModelConverter.convert(buchungsEntity));

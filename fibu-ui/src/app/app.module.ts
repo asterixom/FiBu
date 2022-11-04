@@ -22,8 +22,6 @@ import { ColDirective } from './directives/bootstrap/col.directive';
 import { MatSortModule } from '@angular/material/sort';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { BuchungComponent } from './buchung/view/buchung.component';
-import { NeueBuchungComponent } from './buchung/neu/neu.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
@@ -33,6 +31,8 @@ import { KontoPipe } from './konto/konto.pipe';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { KontoSelectorComponent } from './konto/konto-selector/konto-selector.component';
 import { StandardKontoDirective } from './konto/standard-konto.directive';
+import { FilehandlerComponent } from './files/filehandler/filehandler.component';
+import { ViewComponent } from './buchung/view/view.component';
 
 @NgModule({
   declarations: [
@@ -43,11 +43,11 @@ import { StandardKontoDirective } from './konto/standard-konto.directive';
     ContainerDirective,
     RowDirective,
     ColDirective,
-    BuchungComponent,
-    NeueBuchungComponent,
     KontoPipe,
     KontoSelectorComponent,
     StandardKontoDirective,
+    FilehandlerComponent,
+    ViewComponent,
   ],
   imports: [
     BrowserModule,
