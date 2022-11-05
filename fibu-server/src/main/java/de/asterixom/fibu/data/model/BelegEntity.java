@@ -20,6 +20,7 @@ import org.hibernate.validator.internal.util.stereotypes.Lazy;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
@@ -62,6 +63,7 @@ public class BelegEntity implements Serializable {
 	@Lazy
 	byte[] daten;
 	
+	@EqualsAndHashCode.Exclude
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="buchungsnummer", nullable=false)
 	BuchungsEntity buchung;

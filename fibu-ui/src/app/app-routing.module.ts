@@ -10,9 +10,7 @@ const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'buchung', component: BuchungslisteComponent},
   {path: 'buchung/neu', component: ViewComponent},
-  {path: 'buchung/:id', component: ViewComponent, children: [
-    {path: 'edit', component: ViewComponent}
-  ]},
+  {path: 'buchung/:id', component: ViewComponent},
 ];
 
 @NgModule({

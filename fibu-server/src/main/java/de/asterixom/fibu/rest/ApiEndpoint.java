@@ -18,11 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 
 import de.asterixom.fibu.converter.ModelMapper;
+import de.asterixom.fibu.data.BelegRepository;
 import de.asterixom.fibu.data.BuchungsRepository;
 import de.asterixom.fibu.data.KontenRepository;
+import de.asterixom.fibu.data.model.BelegEntity;
 import de.asterixom.fibu.data.model.BuchungsEntity;
 import de.asterixom.fibu.data.model.KontoEntity;
 import de.asterixom.fibu.properties.FiBuProperties;
+import de.asterixom.fibu.rest.model.Beleg;
 import de.asterixom.fibu.rest.model.Buchung;
 import de.asterixom.fibu.rest.model.Konto;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +39,7 @@ public class ApiEndpoint {
 
 	private final BuchungsRepository buchungsRepository;
 	private final KontenRepository kontenRepository;
+	private final BelegRepository belegRepository;
 	private final FiBuProperties properties;
 	private final ModelMapper mapper;
 
@@ -90,6 +94,14 @@ public class ApiEndpoint {
 		}
 		// Bei gültigem Gegenkonto wird dieses mit der Buchung verknüpft (ersetzt)
 		buchungsEntity.setGegenkonto(gegenkonto.get());
+		
+		for(Beleg beleg : buchung.getBelege()){
+			Optional<BelegEntity> b = belegRepository.findByUuid(beleg.getUuid());
+			if(b.isPresent()) {
+				b.get().setBuchung(buchungsEntity);
+				belegRepository.save(b.get());
+			}
+		}
 
 		// Buchung speichern und Ergebnis zurückgeben
 		buchungsEntity = buchungsRepository.save(buchungsEntity);

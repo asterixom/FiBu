@@ -1,7 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Konto } from 'src/app/konto/model/konto.interface';
 import { BuchungService } from '../buchung.service';
 import { Buchung } from '../model/buchung.interface';
 
@@ -21,12 +20,12 @@ export class ViewComponent implements OnInit {
 
   standardKonto = false;
 
-
   buchung: Buchung = {
     belege: []
   }
 
-  constructor(private route: ActivatedRoute, private buchungService: BuchungService, private router: Router) { }
+  constructor(private route: ActivatedRoute, private buchungService: BuchungService, private router: Router) {
+  }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -77,7 +76,6 @@ export class ViewComponent implements OnInit {
   }
 
   onKeyDown(event: KeyboardEvent){
-    console.log(event.key);
     if(event.key === "+"){
       this.ausgabeEinnahme = true;
     }

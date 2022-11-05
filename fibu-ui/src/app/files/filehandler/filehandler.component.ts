@@ -54,9 +54,12 @@ export class FilehandlerComponent implements OnInit {
   }
 
   onSelectionChangedEvent(event: Event){
-    let files = (event.target as HTMLInputElement).files;
-    if(files) 
+    let element = (event.target as HTMLInputElement);
+    let files = element.files;
+    if(files) {
       this.onFilesSelected(files);
+      element.value = "";
+    }
   }
 
   downloadFile(beleg:UploadedFile){
@@ -70,9 +73,13 @@ export class FilehandlerComponent implements OnInit {
         this.downloads[beleg.uuid].progress = (event.loaded/event.total*100)
       }else if (event.type === HttpEventType.Response && event.body) {
         this.downloads[beleg.uuid].progress = 100;
+        console.log(event.body);
         const url = window.URL.createObjectURL(event.body);
         this.downloads[beleg.uuid].localUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
-        document.getElementById('dl-'+beleg.uuid)?.click();
+        setTimeout(
+          ()=>document.getElementById('dl-'+beleg.uuid)?.click(),
+          500
+        );
       }
     });
   }

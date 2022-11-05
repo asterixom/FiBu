@@ -17,6 +17,7 @@ import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
@@ -52,6 +53,7 @@ public class BuchungsEntity implements Serializable {
 	@JoinColumn(name="gegenkonto", nullable=true)
 	KontoEntity gegenkonto;
 	
+	@EqualsAndHashCode.Exclude
 	@OneToMany(mappedBy="buchung")
 	Set<BelegEntity> belege;
 }

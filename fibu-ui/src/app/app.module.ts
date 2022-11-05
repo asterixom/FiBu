@@ -33,6 +33,7 @@ import { KontoSelectorComponent } from './konto/konto-selector/konto-selector.co
 import { StandardKontoDirective } from './konto/standard-konto.directive';
 import { FilehandlerComponent } from './files/filehandler/filehandler.component';
 import { ViewComponent } from './buchung/view/view.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -69,7 +70,8 @@ import { ViewComponent } from './buchung/view/view.component';
     MatSlideToggleModule,
     MatAutocompleteModule,
     ReactiveFormsModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatTooltipModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },

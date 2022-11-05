@@ -12,7 +12,7 @@
             <a [hidden]="!disabled" mat-raised-button class="row col-12 col-md-2" color="primary" (click)="edit()">Edit</a>
             <a [hidden]="disabled || !buchung.buchungsnummer" mat-raised-button class="row col-12 col-md-2" color="warn" (click)="cancel()">Cancel</a>
         </div>
-        <form (ngSubmit)="submit()">
+        <form (ngSubmit)="submit()" #form>
             <div row>
                 <div class="col-12 col-md-6">
                     <mat-form-field class="" appearance="fill">
@@ -38,7 +38,7 @@
                 </div>
             </div>
             <div row>
-                <app-filehandler [disabled]="disabled" [(belege)]="buchung.belege" class="w-100"></app-filehandler>
+                <app-filehandler [disabled]="disabled" [(belege)]="buchung.belege" class="col"></app-filehandler>
             </div>
             <div row>
                 <div class="col-12 col-md-6">
@@ -48,7 +48,7 @@
                     </mat-form-field>
                 </div>
                 <div class="col-12 col-md-6 pt-2 pt-md-4 pb-2 mt-0 pl-4">
-                    <mat-label class="pr-2">{{ausgabeEinnahme?'Einnahme'+(disabled?'':' (Drücke - für Ausgabe)'):'Ausgabe'+(disabled?'':' (Drücke +für Einnahme)')}}</mat-label>
+                    <mat-label class="pr-2">{{ausgabeEinnahme?'Einnahme'+(disabled?'':' (Drücke - für Ausgabe)'):'Ausgabe'+(disabled?'':' (Drücke + für Einnahme)')}}</mat-label>
                     <!-- <mat-slide-toggle color="primary" [(ngModel)]="ausgabeEinnahme" name="ausgabeEinnahme" tabIndex="-1"></mat-slide-toggle>
                     <mat-label class="pl-2">Einnahme</mat-label> -->
                 </div>
