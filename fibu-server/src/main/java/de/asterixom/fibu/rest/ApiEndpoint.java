@@ -1,8 +1,13 @@
 package de.asterixom.fibu.rest;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -28,6 +33,7 @@ import de.asterixom.fibu.properties.FiBuProperties;
 import de.asterixom.fibu.rest.model.Beleg;
 import de.asterixom.fibu.rest.model.Buchung;
 import de.asterixom.fibu.rest.model.Konto;
+import de.asterixom.fibu.rest.model.Kontoblatt;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -50,6 +56,17 @@ public class ApiEndpoint {
 				.map(mapper::fromEntity)
 				.collect(Collectors.toList());
 		return ResponseEntity.ok(buchungen);
+	}
+
+	@GetMapping("/kontoblaetter")
+	public ResponseEntity<Collection<Kontoblatt>> kontoblaetter(){
+		Map<Konto,Kontoblatt> kontoblaetter = new HashMap<>();
+		kontenRepository.findAll().stream().map(mapper::fromEntity).forEach(k -> kontoblaetter.put(k, new Kontoblatt(k)));
+		buchungsRepository.findAll().stream().map(mapper::fromEntity).forEach(buchung -> {
+			kontoblaetter.get(buchung.getHauptkonto()).getBuchungen().add(buchung);
+			kontoblaetter.get(buchung.getGegenkonto()).getBuchungen().add(buchung);
+		});
+		return ResponseEntity.ok(kontoblaetter.values());
 	}
 
 	@GetMapping("/buchungen/{id}")
@@ -94,10 +111,10 @@ public class ApiEndpoint {
 		}
 		// Bei gültigem Gegenkonto wird dieses mit der Buchung verknüpft (ersetzt)
 		buchungsEntity.setGegenkonto(gegenkonto.get());
-		
-		for(Beleg beleg : buchung.getBelege()){
+
+		for (Beleg beleg : buchung.getBelege()) {
 			Optional<BelegEntity> b = belegRepository.findByUuid(beleg.getUuid());
-			if(b.isPresent()) {
+			if (b.isPresent()) {
 				b.get().setBuchung(buchungsEntity);
 				belegRepository.save(b.get());
 			}

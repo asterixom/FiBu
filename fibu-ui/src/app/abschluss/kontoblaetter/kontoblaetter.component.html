@@ -1,0 +1,36 @@
+<div container class="pb-4">
+    <div row class="pb-4">
+        <div col>
+            <h2>Kontoblätter</h2>
+        </div>
+    </div>
+    <table *ngFor="let kontoblatt of (kontoblaetter$|async);" class="table table-sm mb-4 w-100">
+        <thead>
+            <tr>
+                <th scope="col">{{kontoblatt.konto.id}}</th>
+                <th scope="col" colspan="2">{{kontoblatt.konto.name}}</th>
+                <th scope="col" colspan="3">{{kontoblatt.konto.beschreibung}}</th>
+            </tr>
+        <tr>
+            <th scope="col" style="width: 5em;">BJ-Nr</th>
+            <th scope="col" style="width: 5em;">BelNr</th>
+            <th scope="col" style="width: 7em;">Datum</th>
+            <th scope="col">Buchungstext</th>
+            <th scope="col" style="width: 7em;">Betrag</th>
+            <th scope="col" style="width: 5em;">GKto</th>
+        </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngFor="let buchung of kontoblatt.buchungen">
+                <tr>
+                    <td>{{buchung.buchungsnummer | leftpad:5}}</td>
+                    <td>{{buchung.belege | belege}}</td>
+                    <td>{{buchung.datum}}</td>
+                    <td>{{buchung.name}}</td>
+                    <td class="text-right pr-4">{{buchung.hauptkonto?.id == kontoblatt.konto.id ? buchung.betrag : buchung.betrag ? buchung.betrag * -1 : null}} €</td>
+                    <td>{{buchung.hauptkonto?.id == kontoblatt.konto.id ? buchung.gegenkonto?.id : buchung.hauptkonto?.id}}</td>
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
+</div>

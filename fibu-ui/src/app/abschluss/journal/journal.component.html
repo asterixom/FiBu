@@ -1,0 +1,42 @@
+<div container class="pb-4">
+    <div row class="pb-4">
+        <div col>
+            <h2>Buchungsjournal</h2>
+        </div>
+    </div>
+    <table class="table table-sm w-auto">
+        <thead>
+        <tr>
+            <th scope="col">BJ-Nr</th>
+            <th scope="col">BelNr</th>
+            <th scope="col">Datum</th>
+            <th scope="col">Kto-S</th>
+            <th scope="col">Kto-H</th>
+            <th scope="col">Betrag</th>
+            <th scope="col">Buchungstext</th>
+        </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngFor="let buchung of (buchungen$ | async)">
+            <tr>
+                <td>{{buchung.buchungsnummer | leftpad:5}} A</td>
+                <td>{{buchung.belege | belege}}</td>
+                <td>{{buchung.datum}}</td>
+                <td>{{buchung.betrag != null && buchung.betrag < 0 ? buchung.hauptkonto?.id : buchung.gegenkonto?.id}}</td>
+                <td></td>
+                <td class="text-right">{{buchung.betrag == null || buchung.betrag < 0 ? buchung.betrag : buchung.betrag * -1}} €</td>
+                <td>{{buchung.name}}</td>
+            </tr>
+            <tr>
+                <td>{{buchung.buchungsnummer | leftpad:5}} B</td>
+                <td>{{buchung.belege | belege}}</td>
+                <td>{{buchung.datum}}</td>
+                <td></td>
+                <td>{{buchung.betrag != null && buchung.betrag < 0 ? buchung.gegenkonto?.id : buchung.hauptkonto?.id}}</td>
+                <td class="text-right">{{buchung.betrag != null && buchung.betrag < 0 ? buchung.betrag * -1 : buchung.betrag}} €</td>
+                <td>{{buchung.name}}</td>
+            </tr>
+            </ng-container>
+        </tbody>
+    </table>
+</div>

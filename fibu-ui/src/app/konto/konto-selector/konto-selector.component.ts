@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { KontoPipe } from '../konto.pipe';
+import { KontoPipe } from '../../pipes/konto.pipe';
 import { KontoService } from '../konto.service';
 import { Konto } from '../model/konto.interface';
 import { Observable } from 'rxjs';

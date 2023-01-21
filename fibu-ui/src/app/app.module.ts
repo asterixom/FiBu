@@ -27,13 +27,19 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { MAT_DATE_FORMATS } from '@angular/material/core';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
-import { KontoPipe } from './konto/konto.pipe';
+import { KontoPipe } from './pipes/konto.pipe';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { KontoSelectorComponent } from './konto/konto-selector/konto-selector.component';
 import { StandardKontoDirective } from './konto/standard-konto.directive';
 import { FilehandlerComponent } from './files/filehandler/filehandler.component';
 import { ViewComponent } from './buchung/view/view.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { AbschlussComponent } from './abschluss/abschluss.component';
+import { JournalComponent } from './abschluss/journal/journal.component';
+import { BelegePipe } from './pipes/belege.pipe';
+import { KontoblaetterComponent } from './abschluss/kontoblaetter/kontoblaetter.component';
+import { LeftpadPipe } from './pipes/leftpad.pipe';
+import { SaldenComponent } from './abschluss/salden/salden.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +55,12 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     StandardKontoDirective,
     FilehandlerComponent,
     ViewComponent,
+    AbschlussComponent,
+    JournalComponent,
+    BelegePipe,
+    KontoblaetterComponent,
+    LeftpadPipe,
+    SaldenComponent,
   ],
   imports: [
     BrowserModule,

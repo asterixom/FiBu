@@ -16,7 +16,8 @@ export class AppComponent{
   menuItems = [
     // {name:'Home', path: '/'},
     // {name:'Login', path: 'login'},
-    {name:'Buchungen', path:'buchung'}
+    {name:'Buchungen', path:'buchung'},
+    {name:'Abschluss', path:'abschluss'}
   ];
 
   currentMenuItem: Observable<string>;
