@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { DEFAULT_CURRENCY_CODE, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -40,12 +40,13 @@ import { BelegePipe } from './pipes/belege.pipe';
 import { KontoblaetterComponent } from './abschluss/kontoblaetter/kontoblaetter.component';
 import { LeftpadPipe } from './pipes/leftpad.pipe';
 import { SaldenComponent } from './abschluss/salden/salden.component';
+import { EuroPipe } from './pipes/euro.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
     MainComponent,
+    LoginComponent,
     BuchungslisteComponent,
     ContainerDirective,
     RowDirective,
@@ -61,6 +62,7 @@ import { SaldenComponent } from './abschluss/salden/salden.component';
     KontoblaetterComponent,
     LeftpadPipe,
     SaldenComponent,
+    EuroPipe,
   ],
   imports: [
     BrowserModule,
@@ -72,6 +74,7 @@ import { SaldenComponent } from './abschluss/salden/salden.component';
     BrowserAnimationsModule,
     MatButtonModule,
     MatIconModule,
+    MatInputModule,
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
@@ -100,7 +103,8 @@ import { SaldenComponent } from './abschluss/salden/salden.component';
         },
       }
     },
-    { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } }
+    { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } },
+    { provide: DEFAULT_CURRENCY_CODE, useValue: 'EUR'}
   ],
   bootstrap: [AppComponent]
 })

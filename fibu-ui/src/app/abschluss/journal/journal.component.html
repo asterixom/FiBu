@@ -18,22 +18,22 @@
         </thead>
         <tbody>
             <ng-container *ngFor="let buchung of (buchungen$ | async)">
-            <tr>
+            <tr *ngIf="buchung.betrag && (buchung.betrag <= 0 || buchung.gegenkonto)">
                 <td>{{buchung.buchungsnummer | leftpad:5}} A</td>
                 <td>{{buchung.belege | belege}}</td>
                 <td>{{buchung.datum}}</td>
-                <td>{{buchung.betrag != null && buchung.betrag < 0 ? buchung.hauptkonto?.id : buchung.gegenkonto?.id}}</td>
+                <td>{{buchung.betrag && buchung.betrag <= 0 ? buchung.hauptkonto?.id : buchung.gegenkonto?.id}}</td>
                 <td></td>
                 <td class="text-right">{{buchung.betrag == null || buchung.betrag < 0 ? buchung.betrag : buchung.betrag * -1}} €</td>
                 <td>{{buchung.name}}</td>
             </tr>
-            <tr>
+            <tr *ngIf="buchung.betrag && (buchung.betrag >= 0 || buchung.gegenkonto)">
                 <td>{{buchung.buchungsnummer | leftpad:5}} B</td>
                 <td>{{buchung.belege | belege}}</td>
                 <td>{{buchung.datum}}</td>
                 <td></td>
-                <td>{{buchung.betrag != null && buchung.betrag < 0 ? buchung.gegenkonto?.id : buchung.hauptkonto?.id}}</td>
-                <td class="text-right">{{buchung.betrag != null && buchung.betrag < 0 ? buchung.betrag * -1 : buchung.betrag}} €</td>
+                <td>{{buchung.betrag && buchung.betrag < 0 ? buchung.gegenkonto?.id : buchung.hauptkonto?.id}}</td>
+                <td class="text-right">{{buchung.betrag && buchung.betrag < 0 ? buchung.betrag * -1 : buchung.betrag}} €</td>
                 <td>{{buchung.name}}</td>
             </tr>
             </ng-container>

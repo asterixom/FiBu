@@ -16,8 +16,14 @@
             <th scope="col" style="width: 5em;">BelNr</th>
             <th scope="col" style="width: 7em;">Datum</th>
             <th scope="col">Buchungstext</th>
-            <th scope="col" style="width: 7em;">Betrag</th>
+            <th scope="col" style="width: 10em;">Betrag</th>
             <th scope="col" style="width: 5em;">GKto</th>
+        </tr>
+        <tr>
+            <th scope="col" colspan="3"></th>
+            <th scope="col" class="text-right">ALTER SALDO</th>
+            <th scope="col" class="text-right pr-4">{{kontoblatt.alterSaldo | euro}}</th>
+            <th scope="col"></th>
         </tr>
         </thead>
         <tbody>
@@ -27,10 +33,36 @@
                     <td>{{buchung.belege | belege}}</td>
                     <td>{{buchung.datum}}</td>
                     <td>{{buchung.name}}</td>
-                    <td class="text-right pr-4">{{buchung.hauptkonto?.id == kontoblatt.konto.id ? buchung.betrag : buchung.betrag ? buchung.betrag * -1 : null}} €</td>
+                    <td class="text-right pr-4">{{(buchung.hauptkonto?.id == kontoblatt.konto.id ? buchung.betrag : buchung.betrag ? buchung.betrag * -1 : undefined ) | euro}}</td>
                     <td>{{buchung.hauptkonto?.id == kontoblatt.konto.id ? buchung.gegenkonto?.id : buchung.hauptkonto?.id}}</td>
                 </tr>
             </ng-container>
         </tbody>
+        <tfoot>
+            <tr>
+                <th scope="col" colspan="3"></th>
+                <th scope="col" class="text-right">Haben</th>
+                <th scope="col" class="text-right pr-4">{{kontoblatt.einnahmen | euro }}</th>
+                <th scope="col"></th>
+            </tr>
+            <tr>
+                <th scope="col" colspan="3"></th>
+                <th scope="col" class="text-right">Soll</th>
+                <th scope="col" class="text-right pr-4">{{kontoblatt.ausgaben | euro}}</th>
+                <th scope="col"></th>
+            </tr>
+            <tr>
+                <th scope="col" colspan="3"></th>
+                <th scope="col" class="text-right">SUMME</th>
+                <th scope="col" class="text-right pr-4">{{kontoblatt.summe | euro}}</th>
+                <th scope="col"></th>
+            </tr>
+            <tr>
+                <th scope="col" colspan="3"></th>
+                <th scope="col" class="text-right">NEUER SALDO</th>
+                <th scope="col" class="text-right pr-4">{{kontoblatt.summe + kontoblatt.alterSaldo | euro}}</th>
+                <th scope="col"></th>
+            </tr>
+        </tfoot>
     </table>
 </div>

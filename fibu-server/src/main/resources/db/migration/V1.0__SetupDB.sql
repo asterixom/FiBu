@@ -9,7 +9,7 @@ CREATE TABLE buchungen (
 	datum DATE NOT NULL,
 	name VARCHAR(64) NOT NULL,
 	beschreibung VARCHAR(512),
-	betrag DOUBLE NOT NULL,
+	betrag NUMERIC NOT NULL,
 	hauptkonto INTEGER NOT NULL,
 	gegenkonto INTEGER,
 	

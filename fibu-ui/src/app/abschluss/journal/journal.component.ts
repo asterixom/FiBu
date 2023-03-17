@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { BuchungService } from 'src/app/buchung/buchung.service';
 import { Buchung } from 'src/app/buchung/model/buchung.interface';
+import { PeriodService } from 'src/app/period.service';
 
 @Component({
   selector: 'app-journal',
@@ -13,10 +14,12 @@ export class JournalComponent implements OnInit {
 
   public buchungen$?: Observable<Buchung[]>;
 
-  constructor(private buchungService: BuchungService) { }
+  constructor(private buchungService: BuchungService, private periodService: PeriodService) { }
 
   ngOnInit(): void {
-    this.buchungen$ = this.buchungService.buchungen();
+    this.periodService.year.subscribe(year=>{
+      this.buchungen$ = this.buchungService.buchungen(year+'-01-01',year+'-12-31');
+    });
   }
 
 }

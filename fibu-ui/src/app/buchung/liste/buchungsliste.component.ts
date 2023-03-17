@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Buchung } from '../model/buchung.interface';
 import { BuchungService } from '../buchung.service';
+import { PeriodService } from 'src/app/period.service';
 
 @Component({
   selector: 'app-buchungsliste',
@@ -25,7 +26,7 @@ export class BuchungslisteComponent implements OnInit, AfterViewInit{
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sorter!: MatSort;
 
-  constructor(private router: Router, private service: BuchungService) { 
+  constructor(private router: Router, private service: BuchungService, private periodService: PeriodService) { 
   }
 
   ngAfterViewInit() {
@@ -34,9 +35,11 @@ export class BuchungslisteComponent implements OnInit, AfterViewInit{
   }
 
   ngOnInit(): void {
-    this.service.buchungen().subscribe(
-      response => this.dataSource.data = response
-    );
+    this.periodService.year.subscribe(year=>{
+      this.service.buchungen(year+'-01-01',year+'-12-31').subscribe(
+        response => this.dataSource.data = response
+      );
+    });
   }
 
   clickedRow(row: Buchung){

@@ -1,6 +1,7 @@
 package de.asterixom.fibu.data.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -43,7 +44,7 @@ public class BuchungsEntity implements Serializable {
 	String beschreibung;
 	
 	@Column(nullable = false)
-	Double betrag;
+	BigDecimal betrag;
 	
 	@ManyToOne
 	@JoinColumn(name="hauptkonto", nullable=false)

@@ -12,10 +12,11 @@ export class BuchungService {
 
   private readonly endpoint = env.apiUrl+'/buchungen';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { 
+  }
 
-  buchungen(){
-    return this.http.get<Buchung[]>(this.endpoint);
+  buchungen(from: string, to: string){
+    return this.http.get<Buchung[]>(this.endpoint+'/'+from+'/'+to);
   }
 
   buchung(id: number){
@@ -26,7 +27,7 @@ export class BuchungService {
     return this.http.put<Buchung>(this.endpoint, buchung);
   }
 
-  kontoblaetter(){
-    return this.http.get<Kontoblatt[]>(env.apiUrl+'/kontoblaetter');
+  kontoblaetter(from: string, to: string){
+    return this.http.get<Kontoblatt[]>(env.apiUrl+'/kontoblaetter/'+from+'/'+to);
   }
 }

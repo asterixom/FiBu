@@ -1,5 +1,6 @@
 package de.asterixom.fibu.rest.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -27,7 +28,7 @@ public class Buchung {
 	String beschreibung;
 	
 	@NotNull
-	Double betrag;
+	BigDecimal betrag;
 	
 	@NotNull
 	@Valid

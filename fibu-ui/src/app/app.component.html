@@ -10,6 +10,11 @@
             </div>
         </ng-container>
         <div col></div>
+        <div class="float-right mr-3">
+            <button mat-mini-fab color="primary" (click)="periodService.previous()"><mat-icon>remove</mat-icon></button>
+            <span style="font-weight: bolder; font-size: larger;"> {{periodService._year}} </span>
+            <button mat-mini-fab color="primary" (click)="periodService.next()"><mat-icon>add</mat-icon></button>
+        </div>
         <div class="float-right">
             <button mat-mini-fab (click)="logout()"><mat-icon>lock</mat-icon></button>
         </div>

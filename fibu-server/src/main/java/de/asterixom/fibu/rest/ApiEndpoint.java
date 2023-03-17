@@ -1,5 +1,7 @@
 package de.asterixom.fibu.rest;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -11,9 +13,12 @@ import java.util.stream.Stream;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.websocket.server.PathParam;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -41,6 +46,7 @@ import lombok.extern.log4j.Log4j2;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 @Log4j2
+@Validated
 public class ApiEndpoint {
 
 	private final BuchungsRepository buchungsRepository;
@@ -57,6 +63,15 @@ public class ApiEndpoint {
 				.collect(Collectors.toList());
 		return ResponseEntity.ok(buchungen);
 	}
+	
+	@GetMapping("/buchungen/{from}/{to}")
+	public ResponseEntity<List<Buchung>> buchungen(@PathVariable("from") @DateTimeFormat(pattern = "yyyy-MM-dd") @NotNull LocalDate from, @PathVariable("to") @DateTimeFormat(pattern = "yyyy-MM-dd") @NotNull LocalDate to) {
+		List<Buchung> buchungen = buchungsRepository.findAllByDatumBetween(from,to)
+				.stream()
+				.map(mapper::fromEntity)
+				.collect(Collectors.toList());
+		return ResponseEntity.ok(buchungen);
+	}
 
 	@GetMapping("/kontoblaetter")
 	public ResponseEntity<Collection<Kontoblatt>> kontoblaetter(){
@@ -64,7 +79,26 @@ public class ApiEndpoint {
 		kontenRepository.findAll().stream().map(mapper::fromEntity).forEach(k -> kontoblaetter.put(k, new Kontoblatt(k)));
 		buchungsRepository.findAll().stream().map(mapper::fromEntity).forEach(buchung -> {
 			kontoblaetter.get(buchung.getHauptkonto()).getBuchungen().add(buchung);
-			kontoblaetter.get(buchung.getGegenkonto()).getBuchungen().add(buchung);
+			if(buchung.getGegenkonto()!=null) kontoblaetter.get(buchung.getGegenkonto()).getBuchungen().add(buchung);
+		});
+		return ResponseEntity.ok(kontoblaetter.values());
+	}
+	
+	@GetMapping("/kontoblaetter/{from}/{to}")
+	public ResponseEntity<Collection<Kontoblatt>> kontoblaetter(@PathVariable("from") @DateTimeFormat(pattern = "yyyy-MM-dd") @NotNull LocalDate from, @PathVariable("to") @DateTimeFormat(pattern = "yyyy-MM-dd") @NotNull LocalDate to){
+		Map<Konto,Kontoblatt> kontoblaetter = new HashMap<>();
+		kontenRepository.findAll().stream().map(mapper::fromEntity).forEach(k -> kontoblaetter.put(k, new Kontoblatt(k)));
+		kontoblaetter.forEach((k,v)->{
+			BigDecimal sum = buchungsRepository.getSumBeforeDatumByKonto(from, mapper.toEntity(k));
+			v.setAlterSaldo(sum!=null?sum:BigDecimal.ZERO);
+		});
+		buchungsRepository.findAllByDatumBetween(from,to).stream().map(mapper::fromEntity).forEach(buchung -> {
+			kontoblaetter.get(buchung.getHauptkonto()).getBuchungen().add(buchung);
+			kontoblaetter.get(buchung.getHauptkonto()).addToSum(buchung.getBetrag());
+			if(buchung.getGegenkonto()!=null) {
+				kontoblaetter.get(buchung.getGegenkonto()).getBuchungen().add(buchung);
+				kontoblaetter.get(buchung.getGegenkonto()).addToSum(buchung.getBetrag().negate());
+			}
 		});
 		return ResponseEntity.ok(kontoblaetter.values());
 	}

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { MainService } from './service/main.service';
 
 @Component({
   selector: 'app-main',
@@ -8,15 +7,10 @@ import { MainService } from './service/main.service';
 })
 export class MainComponent implements OnInit {
 
-  hello = '';
-  constructor(private mainService: MainService){
+  constructor(){
   }
 
   ngOnInit(): void {
-    this.mainService.hello().subscribe(result=> {
-        this.hello = result.text;
-      }
-    );
   }
 
 }

@@ -3,5 +3,9 @@ import { Buchung } from "./buchung.interface";
 
 export interface Kontoblatt {
     konto: Konto,
-    buchungen: Buchung[]
+    buchungen: Buchung[],
+    summe: number,
+    einnahmen: number,
+    ausgaben: number,
+    alterSaldo: number,
 }
